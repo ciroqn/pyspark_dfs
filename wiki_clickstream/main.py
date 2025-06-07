@@ -24,3 +24,16 @@ clickstream_sample_df = clickstream_counts_rdd.toDF(['source_page', 'target_page
 
 # Display the DataFrame to the notebook
 clickstream_sample_df.show(5, truncate=False)
+
+
+############# Inspect raw clickstream data ##############
+
+# Read the target directory (`./cleaned/clickstream/`) into a DataFrame (`clickstream`). NOTE: cleaned ---> clickstream folder/files NOT in this directory.
+clickstream = spark.read\
+.option('header', True)\
+.option('delimiter', '\t')\
+.option('inferSchema', True)\
+.csv('./cleaned/clickstream/')
+
+# Display the DataFrame to the notebook
+clickstream.show(5, truncate=False)
