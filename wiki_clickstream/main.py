@@ -40,3 +40,12 @@ clickstream.show(5, truncate=False)
 
 # Display the schema (i.e dtypes) of the `clickstream` DataFrame columns.
 clickstream.printSchema()
+
+# Drop 'language_code' column since the analysis is focused on English.
+clickstream = clickstream.drop('language_code')
+
+# Display the first few rows of the DataFrame
+clickstream.show(5)
+
+# Display the new schema in the notebook
+clickstream.printSchema()
