@@ -37,3 +37,6 @@ clickstream = spark.read\
 
 # Display the DataFrame to the notebook
 clickstream.show(5, truncate=False)
+
+# Display the schema (i.e dtypes) of the `clickstream` DataFrame columns.
+clickstream.printSchema()
