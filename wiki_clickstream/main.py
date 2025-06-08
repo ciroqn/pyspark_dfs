@@ -19,7 +19,7 @@ sample_clickstream_counts = [
 # Create RDD from sample data
 clickstream_counts_rdd = spark.sparkContext.parallelize(sample_clickstream_counts)
 
-# Create a DataFrame from the RDD of sample clickstream counts (col names are give in teh list arg.
+# Create a DataFrame from the RDD of sample clickstream counts (col names are give in the list arg)
 clickstream_sample_df = clickstream_counts_rdd.toDF(['source_page', 'target_page', 'link_category', 'link_count'])
 
 # Display the DataFrame to the notebook
@@ -38,14 +38,23 @@ clickstream = spark.read\
 # Display the DataFrame to the notebook
 clickstream.show(5, truncate=False)
 
-# Display the schema (i.e dtypes) of the `clickstream` DataFrame columns.
+# Display the schema (i.e dtypes) of the `clickstream` DataFrame columns
 clickstream.printSchema()
 
-# Drop 'language_code' column since the analysis is focused on English.
+# Drop 'language_code' column since the analysis is focused on English
 clickstream = clickstream.drop('language_code')
 
 # Display the first few rows of the DataFrame
 clickstream.show(5)
 
-# Display the new schema in the notebook
+# Rename `referrer` and `resource` to `source_page` and `target_page`
+clickstream = clickstream\
+.withColumnRenamed('referrer', 'source_page')\
+.withColumnRenamed('resource', 'target_page')
+  
+# Display the first few rows of the DataFrame
+clickstream.show(5, truncate=False)
+
+# Display the new schema
 clickstream.printSchema()
+
