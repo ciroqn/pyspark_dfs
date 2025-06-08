@@ -58,3 +58,41 @@ clickstream.show(5, truncate=False)
 # Display the new schema
 clickstream.printSchema()
 
+######## Filter data ########
+
+# Create a temporary view in the metadata for this `SparkSession` 
+clickstream.createOrReplaceTempView('clickstream')
+
+# Filter and sort the DataFrame using PySpark DataFrame methods
+clickstream\
+.filter(clickstream.target_page == 'Hanging_Gardens_of_Babylon')\
+.select('*')\
+.orderBy('click_count', ascending=False)\
+.show(truncate=False)
+
+# Alternatively, filter and sort the DataFrame using SQL
+query = """SELECT *
+FROM clickstream
+WHERE target_page = 'Hanging_Gardens_of_Babylon'
+ORDER BY click_count
+"""
+
+spark.sql(query).show(truncate=False)
+
+# Aggregate the DataFrame using PySpark DataFrame Methods: here, we want to know where the traffic is coming from
+clickstream\
+.select(['link_category', 'click_count'])\
+.groupBy('link_category')\
+.sum()\
+.orderBy('sum(click_count)', ascending=False)\
+.show(truncate=False)
+
+# Aggregate the DataFrame using SQL (same as the above)
+query = """SELECT link_category, SUM(click_count)
+FROM clickstream
+GROUP BY 1
+ORDER BY 2 DESC
+"""
+
+spark.sql(query).show(truncate=False)
+
