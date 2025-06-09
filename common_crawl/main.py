@@ -73,3 +73,29 @@ print(total_host_counts)
 
 # Stop the sparkContext and the SparkSession in order to analyse data with SparkSQL
 spark.stop()
+
+############# SparkSQL ##############
+
+# Create a new SparkSession
+spark = SparkSession\
+.builder\
+.getOrCreate()
+
+# Read the target file into a DataFrame. There are NO headers in the DF, but use the default headers given by Spark for now.
+common_crawl = spark.read\
+.option('delimiter', '\t')\
+.option('inferSchema', True)\
+.csv('./crawl/cc-main-limited-domains.csv')
+
+# Display the DataFrame
+common_crawl.show(5, truncate=False)
+
+# Rename the DataFrame's columns 
+common_crawl = common_crawl.withColumnRenamed('_c0', 'site_id')\
+.withColumnRenamed('_c1', 'domain')\
+.withColumnRenamed('_c2', 'top_level_domain')\
+.withColumnRenamed('_c3', 'num_subdomains')
+
+# Display the first few rows of the DataFrame and the new schema
+common_crawl.show(5, truncate=False)
+common_crawl.printSchema()
