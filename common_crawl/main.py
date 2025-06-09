@@ -63,3 +63,13 @@ host_counts = common_crawl_domain_counts.map(lambda x: extract_subdomain_counts(
 host_counts.take(10)
 
 # e.g. ---> [1, 1, 1, 1, 1, 1, 1, 7, 1, 1]
+
+# Reduce the RDD to a single value, the sum of subdomains, with a lambda function
+# as the reduce function
+total_host_counts = host_counts.reduce(lambda x, y: x + y)
+
+# Display result count
+print(total_host_counts)
+
+# Stop the sparkContext and the SparkSession in order to analyse data with SparkSQL
+spark.stop()
