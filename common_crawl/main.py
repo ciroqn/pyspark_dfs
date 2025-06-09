@@ -99,3 +99,16 @@ common_crawl = common_crawl.withColumnRenamed('_c0', 'site_id')\
 # Display the first few rows of the DataFrame and the new schema
 common_crawl.show(5, truncate=False)
 common_crawl.printSchema()
+
+######## Save DF to disc using parquet
+
+# Save the `common_crawl` DataFrame to a series of parquet files
+common_crawl.write.parquet('./results/common_crawl/')
+
+# Read from parquet directory to check
+common_crawl_domains = spark.read\
+.parquet('./results/common_crawl/')
+
+# Display the first few rows of the DataFrame and the schema
+common_crawl_domains.show(5, truncate=False)
+common_crawl_domains.printSchema()
