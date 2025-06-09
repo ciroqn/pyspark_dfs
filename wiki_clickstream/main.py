@@ -96,3 +96,20 @@ ORDER BY 2 DESC
 
 spark.sql(query).show(truncate=False)
 
+####### Save to disc ########
+
+# Create a new DataFrame named `internal_clickstream` that will be saved
+internal_clickstream = clickstream\
+.filter(clickstream.link_category == 'link')\
+.select(['source_page', 'target_page', 'click_count'])
+
+# Display the first few rows of the DataFrame 
+internal_clickstream.show(5, truncate=False)
+
+# Save the `internal_clickstream` DataFrame to a series of CSV files
+internal_clickstream.write.csv('./results/article_to_article_csv/', mode='overwrite')
+
+# Alternatively, save the `internal_clickstream` DataFrame to a series of parquet files
+internal_clickstream.write.parquet('./results/article_to_article_pq/', mode='overwrite')
+
+SparkSession.stop()
